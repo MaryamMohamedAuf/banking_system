@@ -1,0 +1,177 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<edmx:Edmx Version="3.0" xmlns:edmx="http://schemas.microsoft.com/ado/2009/11/edmx">
+  <!-- EF Runtime content -->
+  <edmx:Runtime>
+    <!-- SSDL content -->
+    <edmx:StorageModels>
+      <Schema Namespace="banking_systemModel.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2012" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+        <EntityType Name="Customers">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="name" Type="varchar" MaxLength="100" />
+          <Property Name="email" Type="varchar" MaxLength="100" />
+          <Property Name="current_balance" Type="decimal" Precision="10" Scale="2" />
+        </EntityType>
+        <EntityType Name="Transfers">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="from_customer_id" Type="int" />
+          <Property Name="to_customer_id" Type="int" />
+          <Property Name="amount" Type="decimal" Precision="10" Scale="2" />
+          <Property Name="transfer_date" Type="datetime" />
+        </EntityType>
+        <Association Name="FK__Transfers__from___38996AB5">
+          <End Role="Customers" Type="Self.Customers" Multiplicity="0..1" />
+          <End Role="Transfers" Type="Self.Transfers" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Customers">
+              <PropertyRef Name="id" />
+            </Principal>
+            <Dependent Role="Transfers">
+              <PropertyRef Name="from_customer_id" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__Transfers__to_cu__398D8EEE">
+          <End Role="Customers" Type="Self.Customers" Multiplicity="0..1" />
+          <End Role="Transfers" Type="Self.Transfers" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Customers">
+              <PropertyRef Name="id" />
+            </Principal>
+            <Dependent Role="Transfers">
+              <PropertyRef Name="to_customer_id" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <EntityContainer Name="banking_systemModelStoreContainer">
+          <EntitySet Name="Customers" EntityType="Self.Customers" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Transfers" EntityType="Self.Transfers" Schema="dbo" store:Type="Tables" />
+          <AssociationSet Name="FK__Transfers__from___38996AB5" Association="Self.FK__Transfers__from___38996AB5">
+            <End Role="Customers" EntitySet="Customers" />
+            <End Role="Transfers" EntitySet="Transfers" />
+          </AssociationSet>
+          <AssociationSet Name="FK__Transfers__to_cu__398D8EEE" Association="Self.FK__Transfers__to_cu__398D8EEE">
+            <End Role="Customers" EntitySet="Customers" />
+            <End Role="Transfers" EntitySet="Transfers" />
+          </AssociationSet>
+        </EntityContainer>
+      </Schema>
+    </edmx:StorageModels>
+    <!-- CSDL content -->
+    <edmx:ConceptualModels>
+      <Schema Namespace="banking_systemModel" Alias="Self" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
+        <EntityType Name="Customer">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="name" Type="String" MaxLength="100" FixedLength="false" Unicode="false" />
+          <Property Name="email" Type="String" MaxLength="100" FixedLength="false" Unicode="false" />
+          <Property Name="current_balance" Type="Decimal" Precision="10" Scale="2" />
+          <NavigationProperty Name="Transfers" Relationship="Self.FK__Transfers__from___38996AB5" FromRole="Customers" ToRole="Transfers" />
+          <NavigationProperty Name="Transfers1" Relationship="Self.FK__Transfers__to_cu__398D8EEE" FromRole="Customers" ToRole="Transfers" />
+        </EntityType>
+        <EntityType Name="Transfer">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="from_customer_id" Type="Int32" />
+          <Property Name="to_customer_id" Type="Int32" />
+          <Property Name="amount" Type="Decimal" Precision="10" Scale="2" />
+          <Property Name="transfer_date" Type="DateTime" Precision="3" />
+          <NavigationProperty Name="Customer" Relationship="Self.FK__Transfers__from___38996AB5" FromRole="Transfers" ToRole="Customers" />
+          <NavigationProperty Name="Customer1" Relationship="Self.FK__Transfers__to_cu__398D8EEE" FromRole="Transfers" ToRole="Customers" />
+        </EntityType>
+        <Association Name="FK__Transfers__from___38996AB5">
+          <End Role="Customers" Type="Self.Customer" Multiplicity="0..1" />
+          <End Role="Transfers" Type="Self.Transfer" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Customers">
+              <PropertyRef Name="id" />
+            </Principal>
+            <Dependent Role="Transfers">
+              <PropertyRef Name="from_customer_id" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__Transfers__to_cu__398D8EEE">
+          <End Role="Customers" Type="Self.Customer" Multiplicity="0..1" />
+          <End Role="Transfers" Type="Self.Transfer" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Customers">
+              <PropertyRef Name="id" />
+            </Principal>
+            <Dependent Role="Transfers">
+              <PropertyRef Name="to_customer_id" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <EntityContainer Name="CustomersEntities" annotation:LazyLoadingEnabled="true">
+          <EntitySet Name="Customers" EntityType="Self.Customer" />
+          <EntitySet Name="Transfers" EntityType="Self.Transfer" />
+          <AssociationSet Name="FK__Transfers__from___38996AB5" Association="Self.FK__Transfers__from___38996AB5">
+            <End Role="Customers" EntitySet="Customers" />
+            <End Role="Transfers" EntitySet="Transfers" />
+          </AssociationSet>
+          <AssociationSet Name="FK__Transfers__to_cu__398D8EEE" Association="Self.FK__Transfers__to_cu__398D8EEE">
+            <End Role="Customers" EntitySet="Customers" />
+            <End Role="Transfers" EntitySet="Transfers" />
+          </AssociationSet>
+        </EntityContainer>
+      </Schema>
+    </edmx:ConceptualModels>
+    <!-- C-S mapping content -->
+    <edmx:Mappings>
+      <Mapping Space="C-S" xmlns="http://schemas.microsoft.com/ado/2009/11/mapping/cs">
+        <EntityContainerMapping StorageEntityContainer="banking_systemModelStoreContainer" CdmEntityContainer="CustomersEntities">
+          <EntitySetMapping Name="Customers">
+            <EntityTypeMapping TypeName="banking_systemModel.Customer">
+              <MappingFragment StoreEntitySet="Customers">
+                <ScalarProperty Name="id" ColumnName="id" />
+                <ScalarProperty Name="name" ColumnName="name" />
+                <ScalarProperty Name="email" ColumnName="email" />
+                <ScalarProperty Name="current_balance" ColumnName="current_balance" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Transfers">
+            <EntityTypeMapping TypeName="banking_systemModel.Transfer">
+              <MappingFragment StoreEntitySet="Transfers">
+                <ScalarProperty Name="id" ColumnName="id" />
+                <ScalarProperty Name="from_customer_id" ColumnName="from_customer_id" />
+                <ScalarProperty Name="to_customer_id" ColumnName="to_customer_id" />
+                <ScalarProperty Name="amount" ColumnName="amount" />
+                <ScalarProperty Name="transfer_date" ColumnName="transfer_date" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+        </EntityContainerMapping>
+      </Mapping>
+    </edmx:Mappings>
+  </edmx:Runtime>
+  <!-- EF Designer content (DO NOT EDIT MANUALLY BELOW HERE) -->
+  <Designer xmlns="http://schemas.microsoft.com/ado/2009/11/edmx">
+    <Connection>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="MetadataArtifactProcessing" Value="EmbedInOutputAssembly" />
+      </DesignerInfoPropertySet>
+    </Connection>
+    <Options>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="ValidateOnBuild" Value="true" />
+        <DesignerProperty Name="EnablePluralization" Value="true" />
+        <DesignerProperty Name="IncludeForeignKeysInModel" Value="true" />
+        <DesignerProperty Name="UseLegacyProvider" Value="false" />
+        <DesignerProperty Name="CodeGenerationStrategy" Value="None" />
+      </DesignerInfoPropertySet>
+    </Options>
+    <!-- Diagram content (shape and connector positions) -->
+    <Diagrams></Diagrams>
+  </Designer>
+</edmx:Edmx>
